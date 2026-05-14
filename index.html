@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport d'Avancement Interactif - MaxClean</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Bleu Tech (#1e3a8a, #3b82f6) pour la confiance et la technologie, Orange MaxClean (#ea580c, #f97316) pour les accents et l'action, Gris Ardoise (#f8fafc, #0f172a) pour les arrière-plans et le texte. -->
+    <!-- Application Structure Plan: Structure narrative à défilement vertical (Scrollytelling). L'utilisateur est guidé séquentiellement du macro (Taux d'achèvement) au micro (Architecture, Fonctionnalités, Finances, Étapes). Cette structure remplace la lecture linéaire d'un rapport PDF par une exploration dynamique où chaque section révèle ses détails au clic ou au survol, facilitant l'assimilation des informations techniques et financières complexes. -->
+    <!-- Visualization & Content Choices: 
+         - Avancement -> Informer -> Anneau de progression CSS animé -> Impact visuel immédiat du 97%.
+         - Architecture -> Organiser -> Grille interactive CSS/HTML avec icônes Unicode -> Révèle la complexité sans surcharger la vue initiale (NO SVG).
+         - Finances (Global) -> Comparer -> Chart.js Donut Chart -> Montre la proportion Payé vs Restant de manière intuitive.
+         - Finances (Historique) -> Changer/Comparer -> Chart.js Bar Chart -> Illustre l'évolution des paiements dans le temps.
+         - Prochaines étapes -> Organiser -> Liste stylisée interactive Tailwind -> Clarifie le chemin vers les 100%. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 320px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 380px; } }
+        .progress-circle { width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(#ea580c 97%, #e2e8f0 0); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .progress-inner { width: 130px; height: 130px; border-radius: 50%; background-color: #ffffff; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .interactive-card { transition: all 0.3s ease; }
+        .interactive-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .feature-detail-pane { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .feature-detail-pane.active { display: block; opacity: 1; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0; background-color: #ea580c; transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-black text-blue-900 tracking-tighter">MAX<span class="text-orange-600">CLEAN</span></span>
+                    <span class="ml-3 px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">Phase Finale</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-blue-900 font-medium nav-link">Vue d'ensemble</a>
+                    <a href="#architecture" class="text-slate-600 hover:text-blue-900 font-medium nav-link">Architecture</a>
+                    <a href="#features" class="text-slate-600 hover:text-blue-900 font-medium nav-link">Fonctionnalités</a>
+                    <a href="#financials" class="text-slate-600 hover:text-blue-900 font-medium nav-link">Finances</a>
+                    <a href="#roadmap" class="text-slate-600 hover:text-blue-900 font-medium nav-link">Prochaines Étapes</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="overview" class="pt-20 pb-16 bg-gradient-to-b from-slate-50 to-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                <div class="md:w-3/5">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6">
+                        Application Web d'Évaluation de Prestations Terrain
+                    </h1>
+                    <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                        Ce tableau de bord interactif synthétise l'état d'avancement du projet. Toutes les fondations structurelles, le design des interfaces (UI/UX) et la base de données sont finalisés. L'application est sécurisée et prête pour la phase de recette.
+                    </p>
+                    <div class="flex items-center gap-4 text-sm font-semibold text-slate-500 uppercase tracking-wide">
+                        <span class="flex items-center gap-2">🏢 Client : MaxClean Sénégal</span>
+                        <span class="text-slate-300">|</span>
+                        <span class="flex items-center gap-2">💻 Prestataire : Digital Elite Pro</span>
+                    </div>
+                </div>
+                <div class="md:w-2/5 flex justify-center">
+                    <div class="relative">
+                        <div class="progress-circle">
+                            <div class="progress-inner">
+                                <span class="text-5xl font-black text-slate-800">97%</span>
+                                <span class="text-sm font-bold text-orange-600 mt-1 uppercase tracking-wider">Réalisé</span>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 bg-white p-3 rounded-xl shadow-lg border border-slate-100">
+                            <span class="text-2xl">🚀</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="architecture" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Architecture Modulaire & Évolutive</h2>
+                <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                    Comprendre les fondations de l'application. Cette section détaille la structure "Full-Stack Serverless". Conçue en deux couches distinctes, elle garantit de hautes performances, une sécurité renforcée et une intégration simplifiée avec vos futurs systèmes d'information.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 interactive-card relative overflow-hidden group cursor-default">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-10 group-hover:bg-blue-100 transition-colors"></div>
+                    <div class="text-5xl mb-6">📱</div>
+                    <h3 class="text-2xl font-bold text-blue-900 mb-2">Couche Front-End</h3>
+                    <p class="text-sm font-semibold text-orange-600 mb-6 tracking-wide uppercase">Interface & Interaction</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-blue-500 mt-1">🔲</span>
+                            <div>
+                                <strong class="text-slate-800 block">Technologies clés</strong>
+                                <span class="text-slate-600 text-sm">React.js (React 19 / Next.js 16), Tailwind CSS.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-blue-500 mt-1">🔲</span>
+                            <div>
+                                <strong class="text-slate-800 block">Rôle opérationnel</strong>
+                                <span class="text-slate-600 text-sm">Gère toutes les interactions fluides avec les équipes MaxClean et l'administration centrale. Rendu visuel hautement ergonomique.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 interactive-card relative overflow-hidden group cursor-default">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 group-hover:bg-orange-100 transition-colors"></div>
+                    <div class="text-5xl mb-6">⚙️</div>
+                    <h3 class="text-2xl font-bold text-slate-900 mb-2">Couche Back-End</h3>
+                    <p class="text-sm font-semibold text-blue-600 mb-6 tracking-wide uppercase">Logique & Données</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-orange-500 mt-1">🔲</span>
+                            <div>
+                                <strong class="text-slate-800 block">Technologies clés</strong>
+                                <span class="text-slate-600 text-sm">Server Actions (Next.js), Neon Postgres, Better Auth.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-orange-500 mt-1">🔲</span>
+                            <div>
+                                <strong class="text-slate-800 block">Rôle opérationnel</strong>
+                                <span class="text-slate-600 text-sm">Traitements complexes, sécurité absolue, base de données performante et intégration d'API sans maintenance serveur lourde.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-blue-900 text-white rounded-2xl p-6 md:p-8 flex items-center gap-6 shadow-lg">
+                <div class="text-4xl">📈</div>
+                <div>
+                    <h4 class="text-xl font-bold mb-2">Perspectives d'Évolutivité (Scalability)</h4>
+                    <p class="text-blue-100 leading-relaxed text-sm md:text-base">
+                        Le code et la base de données anticipent votre croissance. L'ajout futur de modules (statistiques avancées, rapports PDF, pointage GPS) se fera avec des <strong>coûts marginaux</strong> et sans refonte de l'architecture existante expliquée ci-dessus.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-20 bg-white border-t border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Matrice des Fonctionnalités Déployées</h2>
+                <p class="text-lg text-slate-600 max-w-3xl leading-relaxed">
+                    Explorez les modules clés actuellement implémentés et validés. Cliquez sur une catégorie pour afficher les détails et comprendre comment chaque module participe à l'optimisation des opérations de MaxClean.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-1/3 flex flex-col gap-3" id="feature-buttons">
+                </div>
+                
+                <div class="lg:w-2/3 bg-slate-50 rounded-2xl border border-slate-200 p-8 relative min-h-[300px] flex items-center justify-center">
+                    <div id="feature-placeholder" class="text-center text-slate-400">
+                        <div class="text-5xl mb-4">👆</div>
+                        <p>Sélectionnez une fonctionnalité à gauche pour voir les détails.</p>
+                    </div>
+                    <div id="feature-content" class="feature-detail-pane w-full">
+                        <div class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-200">
+                            <span id="fc-icon" class="text-4xl bg-white p-3 rounded-xl shadow-sm border border-slate-100"></span>
+                            <h3 id="fc-title" class="text-2xl font-bold text-blue-900"></h3>
+                        </div>
+                        <p id="fc-desc" class="text-lg text-slate-700 leading-relaxed mb-6"></p>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-start gap-3">
+                            <span class="text-green-500">💡</span>
+                            <p id="fc-value" class="text-sm text-slate-600 font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="financials" class="py-20 bg-slate-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Bilan Financier & Transparence</h2>
+                <p class="text-lg text-slate-300 max-w-3xl leading-relaxed">
+                    Cette section visualise l'état des règlements du projet. Les graphiques interactifs ci-dessous comparent les versements déjà effectués par rapport au coût total convenu, définissant clairement le solde restant pour la clôture du projet.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="bg-slate-800 rounded-2xl p-6 shadow-xl border border-slate-700">
+                    <div class="mb-6 text-center">
+                        <h3 class="text-xl font-bold text-slate-100">Répartition du Budget Global</h3>
+                        <p class="text-sm text-slate-400 mt-1">Proportion des fonds encaissés vs solde</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="budgetDoughnut"></canvas>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center bg-slate-900 p-4 rounded-xl">
+                        <div>
+                            <span class="block text-xs text-slate-400 uppercase tracking-wider font-semibold">Coût Total (HT)</span>
+                            <span class="text-2xl font-black text-white">1 475 000 FCFA</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-xs text-orange-400 uppercase tracking-wider font-semibold">Reste à recouvrer</span>
+                            <span class="text-2xl font-black text-orange-500">825 000 FCFA</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-4 italic text-center">Ce solde inclut la phase finale de livraison et de mise en production (les 3% restants).</p>
+                </div>
+
+                <div class="bg-slate-800 rounded-2xl p-6 shadow-xl border border-slate-700">
+                    <div class="mb-6 text-center">
+                        <h3 class="text-xl font-bold text-slate-100">Historique des Versements</h3>
+                        <p class="text-sm text-slate-400 mt-1">Détail des 4 règlements effectués</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="paymentsBar"></canvas>
+                    </div>
+                    <div class="mt-6 text-center bg-blue-900/30 border border-blue-800/50 p-4 rounded-xl">
+                        <span class="block text-sm text-blue-300 uppercase tracking-wider font-bold mb-1">Total Encaissé à ce jour</span>
+                        <span class="text-3xl font-black text-blue-400">650 000 FCFA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">En route vers les 100%</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Pour clôturer formellement le projet et finaliser les 3% restants, les actions suivantes sont programmées. Cliquez sur chaque étape pour en vérifier le contenu.
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="group cursor-pointer">
+                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 p-5 rounded-t-xl group-hover:bg-blue-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-lg shadow-md">1</div>
+                        <h3 class="text-xl font-bold text-slate-800">Tests finaux (UAT)</h3>
+                        <span class="ml-auto text-slate-400 group-hover:text-blue-600 transition-colors text-2xl">▾</span>
+                    </div>
+                    <div class="bg-white border border-t-0 border-slate-200 p-5 rounded-b-xl hidden">
+                        <p class="text-slate-600">User Acceptance Testing : Phase de vérification globale. Les équipes de MaxClean testeront l'application en environnement réel pour valider que tous les flux correspondent aux attentes opérationnelles avant le lancement officiel.</p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 p-5 rounded-t-xl group-hover:bg-blue-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-lg">2</div>
+                        <h3 class="text-xl font-bold text-slate-800">Mise en Production (Go-Live)</h3>
+                        <span class="ml-auto text-slate-400 group-hover:text-blue-600 transition-colors text-2xl">▾</span>
+                    </div>
+                    <div class="bg-white border border-t-0 border-slate-200 p-5 rounded-b-xl hidden">
+                        <p class="text-slate-600">Déploiement final de l'application et de sa base de données sur le domaine officiel choisi par MaxClean. Configuration des certificats de sécurité et optimisation des performances serveur.</p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 p-5 rounded-t-xl group-hover:bg-blue-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-lg">3</div>
+                        <h3 class="text-xl font-bold text-slate-800">Remise des Livrables Documentaires</h3>
+                        <span class="ml-auto text-slate-400 group-hover:text-blue-600 transition-colors text-2xl">▾</span>
+                    </div>
+                    <div class="bg-white border border-t-0 border-slate-200 p-5 rounded-b-xl hidden">
+                        <p class="text-slate-600">Fourniture d'un manuel d'utilisation complet détaillant toutes les procédures pour les administrateurs, accompagnée d'une session de passation technique pour garantir l'autonomie de vos équipes.</p>
+                    </div>
+                </div>
+
+                <div class="group cursor-pointer">
+                    <div class="flex items-center gap-4 bg-slate-50 border border-slate-200 p-5 rounded-t-xl group-hover:bg-orange-50 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-slate-300 text-slate-700 flex items-center justify-center font-bold text-lg">4</div>
+                        <h3 class="text-xl font-bold text-slate-800">Clôture Administrative et Financière</h3>
+                        <span class="ml-auto text-slate-400 group-hover:text-orange-600 transition-colors text-2xl">▾</span>
+                    </div>
+                    <div class="bg-white border border-t-0 border-slate-200 p-5 rounded-b-xl hidden">
+                        <p class="text-slate-600">Signature du Procès-Verbal (PV) de réception définitif attestant de la conformité du projet, déclenchant le règlement du solde restant dû de 825 000 FCFA à Digital Elite Pro Technologies.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 py-8 text-center text-slate-500 text-sm">
+        <p>Fait pour valoir ce que de droit.</p>
+        <p class="mt-2 font-bold text-slate-400">L'équipe de Direction de Projet - Digital Elite Pro Technologies</p>
+    </footer>
+
+    <script>
+        const featuresData = [
+            { id: 'usr', icon: '👥', title: 'Gestion des Utilisateurs', short: 'Profils et rôles des équipes', desc: 'Module de création, modification et administration des profils des équipes MaxClean. Il intègre une gestion stricte des rôles (Admin/User) pour garantir la sécurité et l\'intégrité des accès à la plateforme.', value: 'Assure que seuls les managers peuvent valider ou modifier les paramètres critiques.' },
+            { id: 'eval', icon: '⭐', title: 'Évaluations (Feedback)', short: 'Collecte des avis terrain', desc: 'Cœur du système permettant la collecte et l\'affichage des avis de vos partenaires et clients. Offre une visualisation claire des notations par étoiles et par critères précis (respect des horaires, standards de normes, etc.).', value: 'Permet d\'identifier instantanément les prestations exceptionnelles ou les axes d\'amélioration.' },
+            { id: 'dash', icon: '📊', title: 'Tableau de Bord', short: 'Pilotage et indicateurs', desc: 'Interface centrale de pilotage (Dashboard) offrant une vue d\'ensemble synthétique sur l\'état global du système et les indicateurs clés de performance (KPI) des équipes sur le terrain.', value: 'Aide à la prise de décision rapide pour la direction de MaxClean.' },
+            { id: 'cli', icon: '🤝', title: 'Gestion Clients (Bonus)', short: 'Portefeuille centralisé', desc: 'Fonctionnalité ajoutée gracieusement au projet initial. Elle permet d\'optimiser l\'exploitation du système en offrant un suivi centralisé et simplifié de l\'ensemble du portefeuille client MaxClean.', value: 'Améliore la relation client en centralisant l\'historique des interventions.' },
+            { id: 'sms', icon: '💬', title: 'Notifications SMS', short: 'Alertes et relances automatisées', desc: 'Intégration d\'une API de messagerie externe permettant l\'envoi automatisé d\'alertes, d\'informations ou de relances aux utilisateurs directement sur leurs téléphones.', value: 'Augmente drastiquement le taux de réponse et l\'engagement des utilisateurs.' },
+            { id: 'pay', icon: '💳', title: 'Paiement Mobile', short: 'Intégration Orange Money', desc: 'Mise en place d\'un tunnel de paiement sécurisé. Via OTP ou scan de QR Code, il permet le rechargement de crédits SMS ou l\'activation de services spécifiques directement depuis l\'application.', value: 'Fluidifie les opérations financières liées au maintien du service SMS.' }
+        ];
+
+        function wrapText(text) {
+            if (text.length <= 16) return text;
+            const words = text.split(' ');
+            let lines = [];
+            let currentLine = words[0];
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + words[i].length + 1 <= 16) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function initFeatures() {
+            const btnContainer = document.getElementById('feature-buttons');
+            const placeholder = document.getElementById('feature-placeholder');
+            const contentPane = document.getElementById('feature-content');
+            
+            featuresData.forEach((feat, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left px-5 py-4 bg-white border border-slate-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all flex items-center gap-4 group focus:outline-none';
+                if(index === 0) btn.classList.add('border-blue-500', 'shadow-sm', 'bg-blue-50/50');
+                
+                btn.innerHTML = `
+                    <span class="text-2xl group-hover:scale-110 transition-transform">${feat.icon}</span>
+                    <div>
+                        <div class="font-bold text-slate-800">${feat.title}</div>
+                        <div class="text-xs text-slate-500">${feat.short}</div>
+                    </div>
+                `;
+
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#feature-buttons button').forEach(b => {
+                        b.classList.remove('border-blue-500', 'shadow-sm', 'bg-blue-50/50');
+                        b.classList.add('bg-white');
+                    });
+                    btn.classList.remove('bg-white');
+                    btn.classList.add('border-blue-500', 'shadow-sm', 'bg-blue-50/50');
+
+                    placeholder.style.display = 'none';
+                    contentPane.classList.remove('active');
+                    
+                    setTimeout(() => {
+                        document.getElementById('fc-icon').textContent = feat.icon;
+                        document.getElementById('fc-title').textContent = feat.title;
+                        document.getElementById('fc-desc').textContent = feat.desc;
+                        document.getElementById('fc-value').textContent = feat.value;
+                        contentPane.classList.add('active');
+                    }, 50); 
+                });
+
+                btnContainer.appendChild(btn);
+            });
+            
+            if (btnContainer.firstElementChild) {
+                btnContainer.firstElementChild.click();
+            }
+        }
+
+        function initRoadmapInteractions() {
+            const steps = document.querySelectorAll('#roadmap .group');
+            steps.forEach(step => {
+                const header = step.querySelector('div:first-child');
+                const content = step.querySelector('div:last-child');
+                const icon = header.querySelector('span');
+
+                header.addEventListener('click', () => {
+                    const isHidden = content.classList.contains('hidden');
+                    document.querySelectorAll('#roadmap .group > div:last-child').forEach(c => c.classList.add('hidden'));
+                    document.querySelectorAll('#roadmap .group span').forEach(s => s.textContent = '▾');
+                    
+                    if (isHidden) {
+                        content.classList.remove('hidden');
+                        icon.textContent = '▴';
+                    }
+                });
+            });
+        }
+
+        function renderCharts() {
+            Chart.defaults.font.family = "'Inter', 'Segoe UI', sans-serif";
+            Chart.defaults.color = '#94a3b8';
+
+            const budgetCtx = document.getElementById('budgetDoughnut').getContext('2d');
+            const totalLabel = wrapText('Total Encaissé (FCFA)');
+            const resteLabel = wrapText('Reste à Recouvrer (FCFA)');
+
+            new Chart(budgetCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [totalLabel, resteLabel],
+                    datasets: [{
+                        data: [650000, 825000],
+                        backgroundColor: ['#3b82f6', '#ea580c'],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#f1f5f9', padding: 20, usePointStyle: true, pointStyle: 'circle' } },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                },
+                                label: function(context) {
+                                    return ' ' + context.parsed.toLocaleString('fr-FR') + ' FCFA';
+                                }
+                            },
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            padding: 16,
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 16, weight: 'bold' },
+                            boxPadding: 8
+                        }
+                    }
+                }
+            });
+
+            const paymentsCtx = document.getElementById('paymentsBar').getContext('2d');
+            const l1 = wrapText('Versement 1 (Acompte)');
+            const l2 = wrapText('Versement 2');
+            const l3 = wrapText('Versement 3');
+            const l4 = wrapText('Versement 4 (Actuel)');
+
+            new Chart(paymentsCtx, {
+                type: 'bar',
+                data: {
+                    labels: [l1, l2, l3, l4],
+                    datasets: [{
+                        label: 'Montant versé (FCFA)',
+                        data: [100000, 100000, 200000, 250000],
+                        backgroundColor: '#1e3a8a',
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: '#334155', drawBorder: false },
+                            ticks: { color: '#94a3b8', callback: function(value) { return value.toLocaleString('fr-FR'); } }
+                        },
+                        x: { 
+                            grid: { display: false, drawBorder: false },
+                            ticks: { color: '#cbd5e1' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) return label.join(' ');
+                                    return label;
+                                },
+                                label: function(context) {
+                                    return ' ' + context.parsed.y.toLocaleString('fr-FR') + ' FCFA';
+                                }
+                            },
+                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                            padding: 16,
+                            titleFont: { size: 13 },
+                            bodyFont: { size: 16, weight: 'bold' }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initFeatures();
+            initRoadmapInteractions();
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if(entry.target.id === 'financials' && !window.chartsRendered) {
+                            renderCharts();
+                            window.chartsRendered = true;
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            observer.observe(document.getElementById('financials'));
+        });
+    </script>
+</body>
+</html>
